@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Text;
 using Eisenhower_Matrix.Model;
@@ -14,6 +14,7 @@ namespace Eisenhower_Matrix
             ToDoItems = new List<ToDoItem>();
         }
 
+      
         public void AddItem(int id, string title, DateTime deadline, bool isDone)
         {
             if (string.IsNullOrWhiteSpace(title))
@@ -54,11 +55,13 @@ namespace Eisenhower_Matrix
             ToDoItems.RemoveAll(item => item.IsDone);
         }
 
+     
         public List<ToDoItem> GetItems()
         {
             return ToDoItems;
         }
 
+  
         public override string ToString()
         {
             StringBuilder sb = new StringBuilder();
