@@ -1,11 +1,12 @@
-﻿using System.Text;
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
 using Eisenhower_Matrix.Model;
 
 namespace Eisenhower_Matrix
 {
     public class ToDoQuarter
     {
-
         public List<ToDoItem> ToDoItems;
 
         public ToDoQuarter()
@@ -15,21 +16,42 @@ namespace Eisenhower_Matrix
 
         public void AddItem(int id, string title, DateTime deadline, bool isDone)
         {
+            if (string.IsNullOrWhiteSpace(title))
+            {
+                throw new ArgumentException("Tytuł zadania nie może być pusty lub null.", nameof(title));
+            }
+
+            if (deadline < DateTime.Now)
+            {
+                throw new ArgumentException("Termin wykonania zadania nie może być w przeszłości.", nameof(deadline));
+            }
+
             ToDoItems.Add(new ToDoItem(id, title, deadline, isDone));
         }
 
         public void RemoveItem(int index)
         {
-            ToDoItems.Remove(ToDoItems[index]);
-        }
-        public void ArchiveItems()
-        {
-            // Removes all *TodoItem* objects with a parameter* isDone* set to *true* from list *todoItems*.
+            if (index < 0 || index >= ToDoItems.Count)
+            {
+                throw new ArgumentOutOfRangeException(nameof(index), "Indeks poza zakresem.");
+            }
+
+            ToDoItems.RemoveAt(index);
         }
 
-        public void GetItem(int index)
+        public ToDoItem GetItem(int index)
         {
-            // Returns* TodoItem* object from *index* of list* todoItems*.
+            if (index < 0 || index >= ToDoItems.Count)
+            {
+                throw new ArgumentOutOfRangeException(nameof(index), "Indeks poza zakresem.");
+            }
+
+            return ToDoItems[index];
+        }
+
+        public void ArchiveItems()
+        {
+            ToDoItems.RemoveAll(item => item.IsDone);
         }
 
         public List<ToDoItem> GetItems()
@@ -46,6 +68,5 @@ namespace Eisenhower_Matrix
             }
             return sb.ToString();
         }
-
     }
 }
